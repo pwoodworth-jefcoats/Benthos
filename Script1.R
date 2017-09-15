@@ -99,7 +99,7 @@ if(T){
                            by=list(size.class=RLS$SizeClass), FUN=sum)
       windows()
       barplot(height=RLS.tab$abundance,
-              main="Total abundance distribution",
+              main="Total Abundance distribution",
               xlab= "Size class", 
               ylab= "Abundance",
               cex.lab=1.5, 
