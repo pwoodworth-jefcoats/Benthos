@@ -10,7 +10,7 @@ if(T){
   # -----------------------------------------------------------------------------
   if(install==T){
     # install required packages (if not already installed)
-    list.of.packages <- c("ggplot2", "dplyr", "reshape2", "lubridate")
+    list.of.packages <- c("ggplot2", "dplyr", "reshape2", "lubridate", "ggmap", "maps", "maptools")
     new.packages     <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
     if(length(new.packages)) install.packages(new.packages)
     
@@ -161,3 +161,47 @@ if(T){
   }
 }
 dev.off()
+
+  # which are the most abundant invert species?
+abun <- aggregate(inverts$Abundance, by=list(inverts$TAXONOMIC_NAME), FUN=sum)
+abun <- abun[order(abun$x, decreasing =T),]
+sized <- inverts %>% filter(SizeClass >0)
+
+size <- function(n="all"){
+#how many of the top 100 most abundant inverts do we have a size measure for?
+  if(n!="all") abun <- head(abun, n=n)
+  abun$sized <- !is.na(match(abun$Group.1, sized$TAXONOMIC_NAME))
+  barplot(height=c(Sized=sum(abun$sized), notSized=nrow(abun)-sum(abun$sized)))
+}
+size(n="all")
+size(n=100)
+
+# i want to get the number of sized individuals by site, then plot those co-ords on the map
+abunBYsite <- aggregate(sized$Abundance, by=list(sized$SiteCode), FUN=sum)
+abunBYsite$lon <- sized$SiteLong[match(abunBYsite$Group.1, sized$SiteCode)]
+abunBYsite$lat <- sized$SiteLat[match(abunBYsite$Group.1, sized$SiteCode)]
+
+visited <- c("SFO", "Chennai", "London", "Melbourne", "Johannesbury, SA")
+ll.visited <- geocode(visited)
+visit.x <- ll.visited$lon
+visit.y <- ll.visited$lat
+#> dput(visit.x)
+#c(-122.389979, 80.249583, -0.1198244, 144.96328, 28.06084)
+#> dput(visit.y)
+#c(37.615223, 13.060422, 51.5112139, -37.814107, -26.1319199)
+
+map("world", fill=TRUE, col="white", bg="lightblue", ylim=c(-60, 90), mar=c(0,0,0,0))
+#need to normalise the size of the points so 
+points(abunBYsite$lon,abunBYsite$lat, col="red", pch=16, cex=((abunBYsite$x)/max(abunBYsite$x))*3)
+
+
+
+head(inverts)
+windows()
+barplot(table(inverts$SizeClass))
+sized <- inverts %>% filter(SizeClass >0)
+nrow(sized)
+nrow(inverts)
+
+length(unique(inverts$TAXONOMIC_NAME))
+length(unique(sized$TAXONOMIC_NAME))
