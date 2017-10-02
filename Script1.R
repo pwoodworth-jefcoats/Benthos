@@ -6,7 +6,7 @@ if(T){
   import   = T
   summary  = T
   plotting = F
-  # new comment blah blah
+  # new comment blah blah v2
   # -----------------------------------------------------------------------------
   if(install==T){
     # install required packages (if not already installed)
