@@ -6,7 +6,7 @@ if(T){
   import   = T
   summary  = T
   plotting = F
-  # new comment blah blah v2
+  # new comment blah blah v2 
   # -----------------------------------------------------------------------------
   if(install==T){
     # install required packages (if not already installed)
@@ -18,6 +18,7 @@ if(T){
     lapply(list.of.packages, require, character.only = TRUE)
   }
   # -----------------------------------------------------------------------------
+  
   if(import==T){
     # load data
     RLS     <- read.csv("RLS_MPA_combined_long.csv")
