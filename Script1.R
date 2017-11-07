@@ -8,6 +8,9 @@ if(T){
   summary  = T
   plotting = F
   # new comment blah blah v2 
+  #comment 1
+  #comment 2
+  #comment 3
   # -----------------------------------------------------------------------------
   if(install==T){
     # install required packages (if not already installed)
